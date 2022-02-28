@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Card {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // card "numbers" can include letters, hyphens, digits, and maybe more.
+  cardNumber  String
+  // name on card may not match Player name
+  // ex. Mike Stanton/Giancarlo Stanton, same person, changed name
+  cardName    String
+  year        Int?
+  rookie      Boolean @default(false)
+  autographed Boolean @default(false)
+  relic       Boolean @default(false)
+
+  // perhaps this instead of storing as string?
+  // displayed on card like 012/199
+  // so {serial}/{serialOutOf}
+  serial      Int?
+  serialOutOf Int?
+
+  player    Player? @relation(fields: [playerId], references: [id])
+  playerId  Int?
+  set       Set?    @relation(fields: [setId], references: [id])
+  setId     Int?
+  variation String?
+  notes     String?
+  graded    Boolean @default(false)
+  // store grade as 1-20 to support half-grades (8.5)
+  grade     Int?
+  team      Team?   @relation(fields: [teamId], references: [id])
+  teamId    Int?
+}
+
+model Player {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bbrefId   String?
+  Card      Card[]
+  name      String
+}
+
+model Set {
+  id      Int    @id @default(autoincrement())
+  year    Int
+  company String
+  name    String
+  cards   Card[]
+}
+
+model Team {
+  id    Int    @id @default(autoincrement())
+  name  String
+  cards Card[]
+}
+
+model League {
+  id   Int    @id @default(autoincrement())
+  name String
+}
