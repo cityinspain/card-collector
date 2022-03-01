@@ -1,24 +1,5 @@
-type Team = {
-  id: string;
-  name: string;
-};
-
-type Card = {
-  id: string;
-  cardName: string;
-  cardNumber: string;
-  year: number;
-  rookie: boolean;
-  autographed: boolean;
-  relic: boolean;
-  serial: string;
-  serialOutOf: string;
-  variation: string;
-  notes: string;
-  graded: boolean;
-  grade: number;
-  team: Team;
-};
+import CardForm from "../../components/CardForm";
+import { Card } from "../../models/card.model";
 
 type CardDetailPageProps = {
   card: Card;
@@ -26,7 +7,11 @@ type CardDetailPageProps = {
 const CardDetail = ({ card }: CardDetailPageProps) => {
   return (
     <>
-      <label for="cardNameInput">Card Name</label>
+      <CardForm
+        onSubmit={(values) => console.log(values)}
+        values={{ ...card }}
+      ></CardForm>
+      {/* <label for="cardNameInput">Card Name</label>
       <input id="cardNameInput" value={card.cardName}></input>
       <label for="cardNumberInput">Card Number</label>
       <input id="cardNumberInput" value={card.cardNumber}></input>
@@ -53,7 +38,7 @@ const CardDetail = ({ card }: CardDetailPageProps) => {
       <label for="gradedInput">Graded?</label>
       <input id="gradedInput" type="checkbox" value={card.graded}></input>
       <label for="gradeInput">Grade</label>
-      <input id="gradeInput" value={card.grade}></input>
+      <input id="gradeInput" value={card.grade}></input> */}
     </>
   );
 };
